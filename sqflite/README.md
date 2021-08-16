@@ -26,7 +26,7 @@ In your flutter project add the dependency:
 ```yml
 dependencies:
   ...
-  sqflite: ^1.3.0
+  sqflite:
 ```
 
 For help getting started with Flutter, view the online
@@ -45,7 +45,7 @@ import 'package:sqflite/sqflite.dart';
 ### Opening a database
 
 A SQLite database is a file in the file system identified by a path. If relative, this path is relative to the path
-obtained by `getDatabasesPath()`, which is the default database directory on Android and the documents directory on iOS.
+obtained by `getDatabasesPath()`, which is the default database directory on Android and the documents directory on iOS/MacOS.
 
 ```dart
 var db = await openDatabase('my_db.db');
@@ -235,7 +235,7 @@ map['my_column'] = 1;
 ### Transaction
 
 Don't use the database but only use the Transaction object in a transaction
-to access the database
+to access the database. Keep in mind that the callbacks ```onCreate``` ```onUpgrade``` ```onDowngrade``` are already internally wrapped in a transaction, so there is no need to wrap your statements in a transaction within those callbacks.
 
 ```dart
 await database.transaction((txn) async {
@@ -356,8 +356,10 @@ All calls are currently synchronized and transactions block are exclusive. I tho
 concurrent access is to open a database multiple times but it only works on iOS as Android reuses the same database object.
 I also thought a native thread could be a potential future solution however on android accessing the database in another
 thread is blocked while in a transaction...
-* Currently INTEGER are limited to -2^63 to 2^63 - 1 (although Android supports bigger ones)
 
 ## More
 
 * [How to](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/how_to.md) guide
+* [Notes about Desktop support](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/desktop_support.md)
+* [Notes about Encryption support](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/encryption_support.md)
+* [Notes about Web support](https://github.com/tekartik/sqflite/blob/master/sqflite/doc/web_support.md)
