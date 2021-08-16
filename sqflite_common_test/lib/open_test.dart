@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:test/test.dart';
 import 'package:path/path.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common/utils/utils.dart' as utils;
 import 'package:sqflite_common_test/sqflite_test.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:test/test.dart';
+
 export 'package:sqflite_common/sqflite_dev.dart';
 
 /// Verify a condition in a test.
@@ -312,12 +313,15 @@ void run(SqfliteTestContext context) {
   });
 
   test('Open bad path', () async {
-    try {
-      await factory.openDatabase('/invalid_path');
-      fail('should fail');
-    } on DatabaseException catch (e) {
-      expect(e.toString(), contains('open_failed'));
-      // expect(e.isOpenFailedError(), isTrue, reason: e.toString());
+    // Don't test on windows as it creates the path...
+    if (!context.isWindows) {
+      try {
+        await factory.openDatabase('/invalid_path');
+        fail('should fail');
+      } on DatabaseException catch (e) {
+        expect(e.toString(), contains('open_failed'));
+        // expect(e.isOpenFailedError(), isTrue, reason: e.toString());
+      }
     }
   });
 

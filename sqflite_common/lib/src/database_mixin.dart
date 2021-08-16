@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common/src/batch.dart';
 import 'package:sqflite_common/src/collection_utils.dart';
@@ -10,9 +8,9 @@ import 'package:sqflite_common/src/factory.dart';
 import 'package:sqflite_common/src/sql_builder.dart';
 import 'package:sqflite_common/src/transaction.dart';
 import 'package:sqflite_common/src/utils.dart';
+import 'package:sqflite_common/src/utils.dart' as utils;
 import 'package:sqflite_common/src/value_utils.dart';
 import 'package:sqflite_common/utils/utils.dart';
-import 'package:sqflite_common/src/utils.dart' as utils;
 import 'package:synchronized/synchronized.dart';
 
 /// Base database implementation
@@ -299,7 +297,7 @@ mixin SqfliteDatabaseMixin implements SqfliteDatabase {
   Future<T> devInvokeMethod<T>(String method, [dynamic arguments]) {
     return invokeMethod<T>(
         method,
-        (arguments ?? <String, Object?>{})
+        ((arguments as Map?) ?? <String, Object?>{})
           ..addAll(baseDatabaseMethodArguments));
   }
 
@@ -554,8 +552,8 @@ mixin SqfliteDatabaseMixin implements SqfliteDatabase {
     // the one being about being recovered from the native world
     // where we are going to revert
     // doing first on Android without breaking ios
-    final dynamic openResult =
-        await safeInvokeMethod(methodOpenDatabase, params);
+    final openResult =
+        await safeInvokeMethod<Object?>(methodOpenDatabase, params);
     // devPrint('open result $openResult');
     if (openResult is int) {
       return openResult;

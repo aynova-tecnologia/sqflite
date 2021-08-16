@@ -21,7 +21,7 @@ and common pitfalls.
 
 ```dart
 // Create a table
-await db.execute('CREATE TABLE my_table (id INTEGER PRIMARY KEY AUTO INCREMENT, name TEXT, type TEXT)');
+await db.execute('CREATE TABLE my_table (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT)');
 ```
 
 ### insert
@@ -99,6 +99,19 @@ of values. This does not work. Instead you should list each argument one by one:
 
 ```dart
 var list = await db.rawQuery('SELECT * FROM my_table WHERE name IN (?, ?, ?)', ['cat', 'dog', 'fish']);
+```
+
+Since the list size can change, having the proper number or `?` can be solved using the following solution:
+
+```dart
+List.filled(inArgsCount, '?').join(',')
+```
+
+```dart
+var inArgs = ['cat', 'dog', 'fish'];
+var list = await db.query('my_table',
+  where: 'name IN (${List.filled(inArgs.length, '?').join(',')})',
+  whereArgs: inArgs);
 ```
 
 ### Parameter position

@@ -6,13 +6,18 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/src/database_mixin.dart' show SqfliteDatabaseMixin;
-import 'package:sqflite/src/factory_mixin.dart'
-    show SqfliteDatabaseFactoryMixin;
+import 'package:sqflite/src/database_mixin.dart' // ignore: implementation_imports
+    show
+        SqfliteDatabaseMixin;
+import 'package:sqflite/src/factory_mixin.dart' // ignore: implementation_imports
+    show
+        SqfliteDatabaseFactoryMixin;
 import 'package:sqflite_example/src/dev_utils.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'test_page.dart';
+
+// ignore_for_file: avoid_slow_async_io
 
 /// Open callbacks.
 class OpenCallbacks {
@@ -119,7 +124,8 @@ Future<bool> isDatabase(String path) async {
     db = await openReadOnlyDatabase(path);
     await db.getVersion();
     isDatabase = true;
-  } catch (_) {} finally {
+  } catch (_) {
+  } finally {
     await db?.close();
   }
   return isDatabase;

@@ -1,7 +1,6 @@
 @TestOn('vm')
 import 'dart:io';
 
-import 'package:dev_test/package.dart';
 import 'package:dev_test/build_support.dart';
 import 'package:dev_test/src/run_ci.dart';
 import 'package:path/path.dart';
@@ -18,8 +17,8 @@ void main() {
     setUpAll(() async {
       await buildInitFlutter();
     });
-    var dir = join('.dart_tool', 'sqflite_support', 'raw_flutter_test1', 'test',
-        'project');
+    final dir = join('.dart_tool', 'sqflite_support', 'raw_flutter_test1',
+        'test', 'project');
     var _ensureCreated = false;
     var shell = Shell(workingDirectory: dir);
     Future<void> _create() async {
